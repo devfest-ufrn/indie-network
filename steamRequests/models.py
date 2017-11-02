@@ -37,7 +37,12 @@ class SteamUser:
 
     def _getGames(self):
         url = self._STEAM_WONED_GAMES_URL.replace('{steamKey}', self._STEAM_KEY).replace('{steam64id}', self.steam64ID)
-        return requests.get(url).json().get('response').get('games')
+
+        games = {}
+        for item in requests.get(url).json().get('response').get('games'):
+            games[item.get('appid')] = SteamGame(item.get('appid')).gameName
+        #return requests.get(url).json().get('response').get('games')
+        return games
 
     def showMyGames(self):
         for item in self.gamesList:
@@ -56,16 +61,16 @@ class SteamUser:
         return json
 
 class SteamGame:
-    GAME_INFO_URL = "http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={steamKey}&appid={appid}&format=json"
-    STEAM_KEY = "C0A26A72E4EC723F45C3EA9543B7B7F1"
+    _GAME_INFO_URL = "http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={steamKey}&appid={appid}&format=json"
+    _STEAM_KEY = "C0A26A72E4EC723F45C3EA9543B7B7F1"
     
     def __init__(self, appID):
-        self.gameInfos = self.getGameInfos(appID)
-    
-    def getGameInfos(self, appID):
-        url = self.GAME_INFO_URL.replace('{steamKey}', self.STEAM_KEY).replace('{appid}', appID)
-        print (url)
-        return requests.get(url).json()
+        self.gameInfos = self._getGameInfos(appID)
+        self.gameName = self.gameInfos.get('gameName')
+
+    def _getGameInfos(self, appID):
+        url = self._GAME_INFO_URL.replace('{steamKey}', self._STEAM_KEY).replace('{appid}', str(appID))
+        return requests.get(url).json().get('game')
 '''
 #main
 wgordo = SteamUser("wgordo")
