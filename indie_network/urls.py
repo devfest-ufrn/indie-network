@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', include('core.urls')),
     url(r'^user/(?P<user>\w+)/$', include('users.urls')),
+    url(r'^steamAPI/', include('steamRequests.urls')),
 ]
