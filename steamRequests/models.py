@@ -13,13 +13,17 @@ class SteamUser:
     def __init__(self, username):
         self.username = username
         self.steam64ID = self._getSteamID(username)
-        self._infos = self._getUserInfos()
+        self._infos = self._getUserInfos(self._infos)
         self.name = self._getName(self._infos)
         self.country = self._getCountry(self._infos)
         self.gamesList = self._getGames()
+        self.profileImage = self.getImage()
 
     def __str__(self):
         return  "Username: " + self.username + "\nReal name: " + self.name + "\nCountry: " + self.country
+
+    def getImage(self, player):
+        return player.get('avatarfull')
 
     def _getSteamID(self, username):
         url = self._STEAM_USER_URL.replace("{steamKey}", self._STEAM_KEY).replace("{username}", username)
@@ -27,6 +31,7 @@ class SteamUser:
     
     def _getUserInfos(self):
         url = self._STEAM_USER_INFOS_URL.replace("{steamKey}", self._STEAM_KEY).replace("{steam64ID}", self.steam64ID)
+        print(requests.get(url).json().get('response').get('players')[0])
         return requests.get(url).json().get('response').get('players')[0]
 
     def _getName(self, player):
