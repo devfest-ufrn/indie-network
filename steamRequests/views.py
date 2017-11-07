@@ -9,14 +9,10 @@ def index(request):
     return HttpResponse("You are at Steam requests index")
 
 def userInfos(request, username = ''):
-    user = SteamUser(username)
-    #return wgordo.name
-    return JsonResponse(user.asJson())
+    return JsonResponse(SteamUser(username).asJson())
 
-def showGames(request, username = ''):
-    user = SteamUser(username)
-    #return user.gamesList
-    return JsonResponse(user.gamesList, safe = False)
+def userGames(request, username = ''):
+    return JsonResponse(SteamUser(username).formatedGamesList(), safe = False)
 
 def gameInfos(request, appid = ""):
     game = SteamGame(appid)

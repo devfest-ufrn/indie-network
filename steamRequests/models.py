@@ -7,56 +7,42 @@ class SteamUser:
     _STEAM_KEY = "C0A26A72E4EC723F45C3EA9543B7B7F1"
     _STEAM_USER_INFOS_URL = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={steamKey}&steamids={steam64ID}"
     
-    #remover depois
-    _GAME_INFO_URL = "http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={steamKey}&appid={appid}&format=json"
-
     def __init__(self, username):
         self.username = username
-        self.steam64ID = self._getSteamID(username)
-        self._infos = self._getUserInfos(self._infos)
-        self.name = self._getName(self._infos)
-        self.country = self._getCountry(self._infos)
-        self.gamesList = self._getGames()
-        self.profileImage = self.getImage()
+        self._getSteamID(username)
+        self._getUserInfos()
+        self.getGames()
+        self.getName()
+        self.getCountry()
+        self.getProfileImage()
 
-    def __str__(self):
-        return  "Username: " + self.username + "\nReal name: " + self.name + "\nCountry: " + self.country
-
-    def getImage(self, player):
-        return player.get('avatarfull')
-
+    #requests methods
     def _getSteamID(self, username):
-        url = self._STEAM_USER_URL.replace("{steamKey}", self._STEAM_KEY).replace("{username}", username)
-        return requests.get(url).json().get('response').get('steamid')
-    
+        self._steam64ID = requests.get(self._STEAM_USER_URL.replace("{steamKey}", self._STEAM_KEY).replace("{username}", username)).json().get('response').get('steamid')
+
     def _getUserInfos(self):
-        url = self._STEAM_USER_INFOS_URL.replace("{steamKey}", self._STEAM_KEY).replace("{steam64ID}", self.steam64ID)
-        print(requests.get(url).json().get('response').get('players')[0])
-        return requests.get(url).json().get('response').get('players')[0]
+        self._infos = requests.get(self._STEAM_USER_INFOS_URL.replace("{steamKey}", self._STEAM_KEY).replace("{steam64ID}", self._steam64ID)).json().get('response').get('players')[0]
 
-    def _getName(self, player):
-        return player.get('realname')
-
-    def _getCountry(self, player):
-        return player.get('loccountrycode')
-
-    def _getGames(self):
-        url = self._STEAM_WONED_GAMES_URL.replace('{steamKey}', self._STEAM_KEY).replace('{steam64id}', self.steam64ID)
-
+    def getGames(self):
+        self.games = requests.get(self._STEAM_WONED_GAMES_URL.replace('{steamKey}', self._STEAM_KEY).replace('{steam64id}', self._steam64ID)).json().get('response').get('games')
+        
+    def formatedGamesList(self):
+        #'''
         games = {}
-        for item in requests.get(url).json().get('response').get('games'):
+        for item in self.games:
             games[item.get('appid')] = SteamGame(item.get('appid')).gameName
-        #return requests.get(url).json().get('response').get('games')
         return games
+        #'''
 
-    def showMyGames(self):
-        for item in self.gamesList:
-            url = self._GAME_INFO_URL.replace('{steamKey}', self._STEAM_KEY).replace('{appid}', str(item.get('appid')))
-            gameName = requests.get(url).json().get('game').get('gameName')
-            if gameName is None or gameName.find('ValveTestApp') != -1 or gameName is '':
-                pass
-            else:
-                print(gameName)
+    #simple methods
+    def getProfileImage(self):
+        self.profileImage = self._infos.get('avatarfull')
+
+    def getName(self):
+        self.name = self._infos.get('realname')
+
+    def getCountry(self):
+        self.country = self._infos.get('loccountrycode')
     
     def asJson(self):
         attributes = [item for item in dir(self) if not item.startswith('__') and not item.startswith('_') and not callable(getattr(self, item))]
@@ -70,18 +56,12 @@ class SteamGame:
     _STEAM_KEY = "C0A26A72E4EC723F45C3EA9543B7B7F1"
     
     def __init__(self, appID):
-        self.gameInfos = self._getGameInfos(appID)
+        self.appID = appID
+        self._getGameInfos()
+        
+    def _getGameInfos(self):
+        self.gameInfos = requests.get(self._GAME_INFO_URL.replace('{steamKey}', self._STEAM_KEY).replace('{appid}', str(self.appID))).json().get('game')
+
+    def getName(self):
         self.gameName = self.gameInfos.get('gameName')
-
-    def _getGameInfos(self, appID):
-        url = self._GAME_INFO_URL.replace('{steamKey}', self._STEAM_KEY).replace('{appid}', str(appID))
-        return requests.get(url).json().get('game')
-'''
-#main
-wgordo = SteamUser("wgordo")
-print (wgordo.getGames())
-
-game = SteamGame("400")
-print (game.gameInfos)
-
-'''
+        return self.gameName
