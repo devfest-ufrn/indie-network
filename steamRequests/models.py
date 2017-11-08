@@ -58,10 +58,10 @@ class SteamGame:
     def __init__(self, appID):
         self.appID = appID
         self._getGameInfos()
-        
+        self.gameName = self._getName()
+
     def _getGameInfos(self):
         self.gameInfos = requests.get(self._GAME_INFO_URL.replace('{steamKey}', self._STEAM_KEY).replace('{appid}', str(self.appID))).json().get('game')
 
-    def getName(self):
-        self.gameName = self.gameInfos.get('gameName')
-        return self.gameName
+    def _getName(self):
+        return self.gameInfos.get('gameName')
