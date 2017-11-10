@@ -1,5 +1,8 @@
 import requests
+import json
+from indie_network.settings import BASE_DIR
 from django.db import models
+
 
 class SteamUser:
     _STEAM_USER_URL = "http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={steamKey}&vanityurl={username}&format=json"
@@ -30,7 +33,8 @@ class SteamUser:
         #'''
         games = {}
         for item in self.games:
-            games[item.get('appid')] = SteamGame(item.get('appid')).gameName
+            print(item['appid'])
+            games[item['appid']] = SteamGame(str(item['appid']))
         return games
         #'''
 
@@ -52,16 +56,15 @@ class SteamUser:
         return json
 
 class SteamGame:
-    _GAME_INFO_URL = "http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={steamKey}&appid={appid}&format=json"
     _STEAM_KEY = "C0A26A72E4EC723F45C3EA9543B7B7F1"
     
     def __init__(self, appID):
         self.appID = appID
         self._getGameInfos()
-        self.gameName = self._getName()
+        self.name = self.gameInfos['app_name']
 
     def _getGameInfos(self):
-        self.gameInfos = requests.get(self._GAME_INFO_URL.replace('{steamKey}', self._STEAM_KEY).replace('{appid}', str(self.appID))).json().get('game')
-
-    def _getName(self):
-        return self.gameInfos.get('gameName')
+        print(self.appID)
+        with open(BASE_DIR + '\\util\\base.json') as data_file:    
+            data = json.load(data_file)
+        self.gameInfos = data[self.appID]

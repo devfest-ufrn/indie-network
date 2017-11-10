@@ -15,5 +15,4 @@ def userGames(request, username = ''):
     return JsonResponse(SteamUser(username).formatedGamesList(), safe = False)
 
 def gameInfos(request, appid = ""):
-    game = SteamGame(appid)
-    return HttpResponse(game.gameName)
+    return JsonResponse(SteamGame(appid).gameInfos, safe = False)
