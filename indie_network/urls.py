@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
+    url(r'^', include('indie_network.core.urls')),
+    url(r'^user/(?P<user>\w+)/$', include('indie_network.users.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^$', include('core.urls')),
-    url(r'^user/(?P<user>\w+)/$', include('users.urls')),
 ]
