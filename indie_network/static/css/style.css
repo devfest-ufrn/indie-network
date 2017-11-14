@@ -1,0 +1,18 @@
+#authentication {
+    padding: 22px 16px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.loginForm, .signupForm {
+    padding: 22px;
+    background-color: #222222;
+    border: 1px solid #464545;
+    border-top: none;
+}
+
+.partners {
+    list-style: none;
+}

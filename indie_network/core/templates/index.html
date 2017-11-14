@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="Dashboard">
+	<meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+
+	<title>Indie Network</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="{% static 'css/darkly/theme/bootstrap.min.css' %}" rel="stylesheet">
+	<!--external css-->
+	<link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrapmin.css' %}"/>
+
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+
+	<section id="authentication" class="col-xs-12 col-md-4 panel">
+		<div class="text-center panel-heading">
+			<h1 class="text-success panel-title">Indie Network</h1>
+		</div>
+		<div class="panel-body">
+        <ul class="nav nav-tabs formTabs">
+          <li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
+          <li role="presentation"><a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">Signup</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="login">
+            <form class="loginForm" action="" method="post">                
+              <fieldset class="form-group">
+                <label for="email">E-mail</label>
+                <input class="form-control" type="email" name="email" id="email" placeholder="email@domain.com" required>
+              </fieldset>
+
+              <fieldset class="form-group">
+                <label for="senha">Password</label>
+                <input class="form-control" type="password" name="senha" id="senha" placeholder="type your password" required>
+                <a href="#">Forgot password?</a>
+              </fieldset>
+
+              <button type="submit" class="btn btn-success">Log me in</button>
+            </form>        
+          </div>
+          <div role="tabpanel" class="tab-pane" id="signup">
+            <form class="signupForm" action="" method="post">                
+              <fieldset class="form-group" >
+                <label for="nome">Full name</label>
+                <input class="form-control" type="text" name="nome" id="nome" placeholder="type your name" required>
+              </fieldset>
+
+              <fieldset class="form-group">
+                <label for="email">E-mail</label>
+                <input class="form-control" type="email" name="email" id="email" placeholder="email@domain.com" required>
+              </fieldset>
+
+              <fieldset class="form-group">
+                <label for="senha">Password</label>
+                <input class="form-control" type="password" name="senha" id="senha" placeholder="choose a password" required>
+              </fieldset>
+
+              <fieldset class="form-group">
+                <label for="senha-confirma">Confirm password</label>
+                <input class="form-control" type="password" name="senha-confirma" placeholder="confirm the password" id="senha-confirma" required>
+              </fieldset>
+
+              <button type="submit" class="btn btn-success">Sign me up</button>
+            </form>
+          </div>
+        </div>
+    </div>
+		
+
+		<div class="col-xs-12">
+      <h4 class="text-center">Or use your account in</h4>
+      <div class="btn-group btn-group-justified" role="group" aria-label="...">
+        <div class="btn-group" role="group">
+          <button class="btn btn-primary" type="submit"><i class="fa fa-facebook"></i> Facebook</button>
+        </div>
+        <div class="btn-group" role="group">
+          <button class="btn btn-default" type="submit"><i class="fa fa-steam"></i> Steam</button>
+        </div>
+      </div>
+		</div>
+	</section>
+
+<!-- js placed at the end of the document so the pages load faster -->
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/bootstrap/html5shiv.js' %}"></script>
+<script src="{% static 'js/bootstrap/respond.min.js' %}"></script>
+
+<!--BACKSTRETCH-->
+<!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
+<script type="text/javascript" src="{% static 'js/jquery.backstretch.min.js' %}"></script>
+<script>
+$.backstretch("{% static 'img/login-bg.jpg' %}", {speed: 500});
+</script>
+</body>
+</html>
