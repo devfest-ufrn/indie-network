@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'users',
     'core',
     'steamRequests',
+    'django_openid_auth',
+    'django_steam_api',
+    'django_steam',
 ]
 
 MIDDLEWARE = [
@@ -72,6 +75,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'indie_network.wsgi.application'
 
+#https://pypi.python.org/pypi/django-steam/0.1
+
+AUTHENTICATION_BACKENDS = ('django_openid_auth.auth.OpenIDBackend',)
+
+LOGIN_URL = '/openid/login/'
+LOGIN_REDIRECT_URL = '/'
+OPENID_CREATE_USERS = True
+STEAM_API_KEY = 'C0A26A72E4EC723F45C3EA9543B7B7F1'
+
+# recommended
+OPENID_SSO_SERVER_URL = 'http://steamcommunity.com/openid'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases

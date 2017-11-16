@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^$', include('core.urls')),
     url(r'^user/(?P<user>\w+)/$', include('users.urls')),
     url(r'^steamAPI/', include('steamRequests.urls')),
+    url(r'^openid/', include('django_openid_auth.urls')),
+    url(r'^accounts/profile/', include('steamRequests.urls')),
 ]
