@@ -3,10 +3,13 @@ from django.shortcuts import render
 from steamRequests.models import SteamUser
 from steamRequests.models import SteamGame
 from django.http import JsonResponse
+from authentication.models import SteamUser as user
 
 
 def index(request):
-    return HttpResponse("You are at Steam requests index")
+    for u in user.objects.all():
+        if (u.is_active):
+            return JsonResponse(SteamUser(u.steamid).asJson(), safe = False)
 
 def userInfos(request, username = ''):
     return JsonResponse(SteamUser(username).asJson())

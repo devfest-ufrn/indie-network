@@ -10,19 +10,12 @@ class SteamUser:
     _STEAM_KEY = "C0A26A72E4EC723F45C3EA9543B7B7F1"
     _STEAM_USER_INFOS_URL = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={steamKey}&steamids={steam64ID}"
     
-    def __init__(self, username):
-        self.username = username
-        self._getSteamID(username)
+    def __init__(self, steam64id):
+        self._steam64ID = steam64id
         self._getUserInfos()
         self.getGames()
-        self.getName()
-        self.getCountry()
-        self.getProfileImage()
 
     #requests methods
-    def _getSteamID(self, username):
-        self._steam64ID = requests.get(self._STEAM_USER_URL.replace("{steamKey}", self._STEAM_KEY).replace("{username}", username)).json().get('response').get('steamid')
-
     def _getUserInfos(self):
         self._infos = requests.get(self._STEAM_USER_INFOS_URL.replace("{steamKey}", self._STEAM_KEY).replace("{steam64ID}", self._steam64ID)).json().get('response').get('players')[0]
 
@@ -39,21 +32,16 @@ class SteamUser:
         #'''
 
     #simple methods
-    def getProfileImage(self):
-        self.profileImage = self._infos.get('avatarfull')
-
-    def getName(self):
-        self.name = self._infos.get('realname')
-
-    def getCountry(self):
-        self.country = self._infos.get('loccountrycode')
-    
     def asJson(self):
+        self._infos['games'] = self.games
+        return self._infos
+        '''
         attributes = [item for item in dir(self) if not item.startswith('__') and not item.startswith('_') and not callable(getattr(self, item))]
         json = {}
         for item in attributes:
             json[item] = getattr(self, item)
         return json
+        '''
 
 class SteamGame:
     _STEAM_KEY = "C0A26A72E4EC723F45C3EA9543B7B7F1"
