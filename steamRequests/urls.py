@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index),
-    url(r'^user/(?P<username>\S+)/infos/$', views.userInfos, name = 'userInfos'),
-    url(r'^user/(?P<username>\S+)/games/$', views.userGames, name = 'userGameList'),
+    url(r'^user/(?P<steamid>[0-9]+)/infos/$', views.userInfos, name = 'userInfos'),
+    url(r'^user/(?P<steamid>[0-9]+)/games/$', views.userGames, name = 'userGameList'),
     url(r'^game/(?P<appid>[0-9]+)/infos/$', views.gameInfos, name = 'gameInfos'),
 ]

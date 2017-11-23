@@ -11,11 +11,11 @@ def index(request):
         if (u.is_active):
             return JsonResponse(SteamUser(u.steamid).asJson(), safe = False)
 
-def userInfos(request, username = ''):
-    return JsonResponse(SteamUser(username).asJson())
+def userInfos(request, steamid = ''):
+    return JsonResponse(SteamUser(steamid).asJson())
 
-def userGames(request, username = ''):
-    return JsonResponse(SteamUser(username).formatedGamesList(), safe = False)
+def userGames(request, steamid = ''):
+    return JsonResponse(SteamUser(steamid).formatedGamesList(), safe = False)
 
 def gameInfos(request, appid = ""):
     return JsonResponse(SteamGame(appid).gameInfos, safe = False)

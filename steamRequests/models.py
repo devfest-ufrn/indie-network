@@ -1,8 +1,7 @@
 import requests
 import json
+from bs4 import BeautifulSoup
 from indie_network.settings import BASE_DIR
-from django.db import models
-
 
 class SteamUser:
     _STEAM_USER_URL = "http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={steamKey}&vanityurl={username}&format=json"
@@ -26,8 +25,7 @@ class SteamUser:
         #'''
         games = {}
         for item in self.games:
-            print(item['appid'])
-            games[item['appid']] = SteamGame(str(item['appid']))
+            games[item['appid']] = SteamGame(str(item['appid'])).infos
         return games
         #'''
 
@@ -35,24 +33,46 @@ class SteamUser:
     def asJson(self):
         self._infos['games'] = self.games
         return self._infos
-        '''
-        attributes = [item for item in dir(self) if not item.startswith('__') and not item.startswith('_') and not callable(getattr(self, item))]
-        json = {}
-        for item in attributes:
-            json[item] = getattr(self, item)
-        return json
-        '''
 
 class SteamGame:
-    _STEAM_KEY = "C0A26A72E4EC723F45C3EA9543B7B7F1"
-    
     def __init__(self, appID):
         self.appID = appID
         self._getGameInfos()
-        self.name = self.gameInfos['app_name']
 
     def _getGameInfos(self):
-        print(self.appID)
-        with open(BASE_DIR + '\\util\\base.json') as data_file:    
-            data = json.load(data_file)
-        self.gameInfos = data[self.appID]
+        try:
+            self.infos = SteamAppCrawler(self.appID).details
+            self.name = self.infos['Title']
+        except IndexError:
+            self.infos = {self.appID : 'Request error'}
+        except TypeError:
+            self.infos = {self.appID : 'Need confirmation'}
+
+class SteamAppCrawler:
+    BASE_URL = "http://store.steampowered.com/app/"
+
+    def __init__(self, appid):
+        self.appid = appid
+        self.details = {}
+        self._getInfos()
+
+    def _getInfos(self):
+        r = requests.get(self.BASE_URL + self.appid)
+        s = BeautifulSoup(r.text, 'html.parser')
+        self.getTags(s)
+        self.getDetails(s)
+
+    def getTags(self, soup):
+        self._tags = []
+        for item in soup.find_all(class_= 'game_area_details_specs'):
+            self._tags.append(item.get_text())
+        self.details['Tags'] = self._tags
+
+    def getDetails(self, soup):
+        item = soup.find_all(class_= 'details_block')[0]
+        item = item.get_text().split('\n')
+
+        for line in item:
+            for prop in [ 'Title', 'Genre', 'Release Date' ]:
+                if prop in line:
+                    self.details[prop] = line.replace(prop, '').replace(':', '').strip()
