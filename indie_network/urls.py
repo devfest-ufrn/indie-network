@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^', include('indie_network.core.urls')),
     url(r'^user/(?P<user>\w+)/$', include('indie_network.users.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^steam/', include('indie_network.steamCrawler.urls')),
 ]
