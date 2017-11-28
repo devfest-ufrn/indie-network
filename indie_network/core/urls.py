@@ -1,7 +1,9 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 
-from . import views
+#from . import views
 
 urlpatterns = [
-    url(r'core', views.dashboard,),
+    #url(r'^', views.index),
+    url(r'^', include('social_django.urls', namespace='social')),
+    url(r'^', include('indie_network.authentication.urls', namespace='auth')),
 ]
