@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+
+    <title>{% block title %}Welcome{% endblock title %} | Indie Network</title>
+    {% block head_meta %}
+            {% block head_meta_charset %}
+                <meta charset="utf-8" />
+            {% endblock head_meta_charset %}
+            {% block head_meta_viewport %}
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            {% endblock head_meta_viewport %}
+            <meta name="description" content="">
+            <meta name="author" content="omelhortime">
+            <meta name="keyword" content="Web 2 - BTI">
+    {% endblock head_meta %}
+    {% block head_css %}
+        <!-- Bootstrap core CSS -->
+        <link href="{% static 'css/darkly/theme/bootstrap.min.css' %}" rel="stylesheet">
+        <!--external css-->
+        <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrapmin.css' %}"/>
+        {% block head_css_page %}<link href="{% static 'css/style.css' %}" rel="stylesheet" />{% endblock head_css_page %}
+    {% endblock head_css %}
+</head>
+<body>
+    <div id="content">
+	{% block content %}
+        if you're seeing this message, there was a problem loading the content of this page!
+    {% endblock content %}
+    </div>
+
+    {% block javascript_code %}
+        <script src="{% static 'js/jquery.js' %}"></script>
+        <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap/html5shiv.js' %}"></script>
+        <script src="{% static 'js/bootstrap/respond.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/jquery.backstretch.min.js' %}"></script>
+        <!--BACKSTRETCH-->
+        <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
+        <script>$.backstretch("{% static 'img/login-bg.jpg' %}", {speed: 500});</script>
+        {% block javascript_code_page %}{% endblock javascript_code_page %}
+    {% endblock javascript_code %}
+</body>
+</html>
