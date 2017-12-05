@@ -20,6 +20,7 @@
         <link href="{% static 'css/darkly/theme/bootstrap.min.css' %}" rel="stylesheet">
         <!--external css-->
         <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrapmin.css' %}"/>
         {% block head_css_page %}<link href="{% static 'css/style.css' %}" rel="stylesheet" />{% endblock head_css_page %}
     {% endblock head_css %}
 </head>
@@ -37,8 +38,6 @@
         <script src="{% static 'js/bootstrap/respond.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/jquery.backstretch.min.js' %}"></script>
         <!--BACKSTRETCH-->
-        <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
-        <script>$.backstretch("{% static 'img/login-bg.jpg' %}", {speed: 500});</script>
         {% block javascript_code_page %}{% endblock javascript_code_page %}
     {% endblock javascript_code %}
 </body>
