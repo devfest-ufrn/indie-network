@@ -2,6 +2,7 @@ import requests
 import json
 from bs4 import BeautifulSoup
 from indie_network.settings import BASE_DIR
+from django.db import models
 
 class SteamUser:
     _STEAM_USER_URL = "http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={steamKey}&vanityurl={username}&format=json"
@@ -39,7 +40,7 @@ class SteamGame:
         self.appID = appID
         self._getGameInfos()
 
-    def _getGameInfos(self):
+    def _getGameInfos(self): 
         try:
             self.infos = SteamAppCrawler(self.appID).details
             self.name = self.infos['Title']
@@ -76,3 +77,12 @@ class SteamAppCrawler:
             for prop in [ 'Title', 'Genre', 'Release Date' ]:
                 if prop in line:
                     self.details[prop] = line.replace(prop, '').replace(':', '').strip()
+
+class Games(models.Model):
+    name = models.CharField("Nome",max_length=30)
+    genre = models.CharField("Gênero",max_length=30)
+    photo = models.ImageField(upload_to = 'pics/', default = 'pics/jogos.jpg')
+
+    def __str__(self):
+        return self.name
+
