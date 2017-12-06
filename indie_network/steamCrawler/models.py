@@ -41,13 +41,7 @@ class SteamGame:
         self._getGameInfos()
 
     def _getGameInfos(self): 
-        try:
-            self.infos = SteamAppCrawler(self.appID).details
-            self.name = self.infos['Title']
-        except IndexError:
-            self.infos = {self.appID : 'Request error'}
-        except TypeError:
-            self.infos = {self.appID : 'Need confirmation'}
+        self.infos = SteamAppCrawler(self.appID).details
 
 class SteamAppCrawler:
     BASE_URL = "http://store.steampowered.com/app/"
@@ -58,7 +52,7 @@ class SteamAppCrawler:
         self._getInfos()
 
     def _getInfos(self):
-        r = requests.get(self.BASE_URL + self.appid)
+        r = requests.get(self.BASE_URL + str(self.appid))
         s = BeautifulSoup(r.text, 'html.parser')
         self.getTags(s)
         self.getDetails(s)
@@ -70,13 +64,22 @@ class SteamAppCrawler:
         self.details['Tags'] = self._tags
 
     def getDetails(self, soup):
-        item = soup.find_all(class_= 'details_block')[0]
-        item = item.get_text().split('\n')
+        try:
+            item = soup.find_all(class_= 'details_block')[0]
+            item = item.get_text().split('\n')
 
-        for line in item:
-            for prop in [ 'Title', 'Genre', 'Release Date' ]:
-                if prop in line:
-                    self.details[prop] = line.replace(prop, '').replace(':', '').strip()
+            for line in item:
+                for prop in [ 'Title', 'Genre', 'Release Date' ]:
+                    if prop in line:
+                        self.details[prop] = line.replace(prop, '').replace(':', '').strip()
+        except TypeError as te:
+            self.details['Title'] = 'Null'
+            self.details['Genre'] = 'Null'
+            self.details['Release Date'] = 'Null'
+        except IndexError as ie:
+            self.details['Title'] = 'Null'
+            self.details['Genre'] = 'Null'
+            self.details['Release Date'] = 'Null'
 
 class Games(models.Model):
     name = models.CharField("Nome",max_length=30)
@@ -84,5 +87,4 @@ class Games(models.Model):
     photo = models.ImageField(upload_to = 'pics/', default = 'pics/jogos.jpg')
 
     def __str__(self):
-        return self.name
-
+        return self.name + " - " + self.genre
