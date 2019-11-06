@@ -1,4 +1,5 @@
 # indie-network
+
 Projeto da pseudo rede social para divulgação de jogos indie desenvolvido por "omelhortime", na disciplina de Desenvolvimento de Sistemas Web 2.
 
 O desenvolvimento desse projeto está temporariamente interrompido.
